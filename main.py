@@ -165,9 +165,8 @@ def main(para):
     model_name = "./model/{}_{}_{}_{}_{}_{}".format(para["seed"], para["national"], para["batch_size"], para["ed"],
                                                     para["hl"],
                                                     para["gl"])
-    res = train(model_name, model, para["epoch"], train_his, train_cur, trian_y, vld_his, vld_cur, vld_y, test_his,
+    train(model_name, model, para["epoch"], train_his, train_cur, trian_y, vld_his, vld_cur, vld_y, test_his,
                 test_cur, test_y)
-    return res
 
 if __name__ == '__main__':
     top_k = 5

@@ -174,20 +174,6 @@ def train(model_name, model, epoch, train_his, train_cur, train_y, vld_his, vld_
             res["f1_epoch"] = eps
             torch.save(model.state_dict(), model_name + "_{}.pth".format("f1"))
 
-    print(
-        'MAX: h1:{},h3:{},h5:{},m1:{},m3:{},m5:{},f1:{}'.format(np.array(h1l).max(), np.array(h3l).max(),
-                                                                np.array(h5l).max(),
-                                                                np.array(m1l).max(), np.array(m3l).max(),
-                                                                np.array(m5l).max(), f1_max))
-
-    # fs.write(str('MAX: h1:{},h3:{},h5:{},m1:{},m3:{},m5:{}'.format(np.array(h1l).max(), np.array(h3l).max(),
-    #                                                                np.array(h5l).max(),
-    #                                                                np.array(m1l).max(), np.array(m3l).max(),
-    #                                                                np.array(m5l).max())) + "\n")
-
-    f1, h1, h3, h5, m1, m3, m5, val_loss = val(model, test_his, test_cur, test_y, top_k)
-    print('h1:{},h3:{},h5:{},m1:{},m3:{},m5:{}'.format(h1, h3, h5, m1, m3, m5))
-
     return res
 
 

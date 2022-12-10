@@ -4,7 +4,6 @@ import time
 import numpy as np
 import pickle
 from DeepUDI import *
-# from DeepUDI import *
 from sklearn.metrics import f1_score
 import json
 import argparse
@@ -96,17 +95,6 @@ def train(model_name, model, epoch, train_his, train_cur, train_y, vld_his, vld_
     counter = 0
     opt = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=0.00001)
     loss_criterion = torch.nn.CrossEntropyLoss()
-    h1l, h3l, h5l, m1l, m3l, m5l = [], [], [], [], [], []
-
-    h1_max = 0
-    h3_max = 0
-    h5_max = 0
-    m1_max = 0
-    m3_max = 0
-    m5_max = 0
-    f1_max = 0
-    res = {}
-    # earlystopping = EarlyStopping(patience=7, path='./data/{}/BEST_{}.pth'.format(national, top_k))
     for eps in range(epoch):
         t1 = time.time()
         model.train()
@@ -125,56 +113,6 @@ def train(model_name, model, epoch, train_his, train_cur, train_y, vld_his, vld_
             'epoch:{},h1:{},h3:{},h5:{},m1:{},m3:{},m5:{},f1:{},loss:{},time:{}'.format(eps, h1, h3, h5, m1, m3, m5, f1,
                                                                                         val_loss,
                                                                                         (t2 - t1)))
-        h1l.append(h1)
-        h3l.append(h3)
-        h5l.append(h5)
-        m1l.append(m1)
-        m3l.append(m3)
-        m5l.append(m5)
-
-        if h1 > h1_max:
-            h1_max = h1
-            res["h1"] = h1_max
-            res["h1_epoch"] = eps
-            torch.save(model.state_dict(), model_name + "_{}.pth".format("h1"))
-
-        if h3 > h3_max:
-            h3_max = h3
-            res["h3"] = h3_max
-            res["h3_epoch"] = eps
-            torch.save(model.state_dict(), model_name + "_{}.pth".format("h3"))
-
-        if h5 > h5_max:
-            h5_max = h5
-            res["h5"] = h5_max
-            res["h5_epoch"] = eps
-            torch.save(model.state_dict(), model_name + "_{}.pth".format("h5"))
-
-        if m1 > m1_max:
-            m1_max = m1
-            res["m1"] = m1_max
-            res["m1_epoch"] = eps
-            torch.save(model.state_dict(), model_name + "_{}.pth".format("m1"))
-
-        if m3 > m3_max:
-            m3_max = m3
-            res["m3"] = m3_max
-            res["m3_epoch"] = eps
-            torch.save(model.state_dict(), model_name + "_{}.pth".format("m3"))
-
-        if m5 > m5_max:
-            m5_max = m5
-            res["m5"] = m5_max
-            res["m5_epoch"] = eps
-            torch.save(model.state_dict(), model_name + "_{}.pth".format("m5"))
-
-        if f1 > f1_max:
-            f1_max = f1
-            res["f1"] = f1_max
-            res["f1_epoch"] = eps
-            torch.save(model.state_dict(), model_name + "_{}.pth".format("f1"))
-
-    return res
 
 
 def setup_seed(seed):
@@ -231,36 +169,6 @@ def main(para):
                 test_cur, test_y)
     return res
 
-
-def run():
-    para = {
-        "seed": 5,
-        # "national": "fr",
-        "national": "kr",
-        "batch_size": 512,
-        "epoch": 100,
-        "ed": 50,  # embedding dimension
-        "hl": 5,  # history length
-        "gl": 2,  # gnn layer
-        # "h_flag": True,  # history flag
-        # "g_flag": True,  # gnn flag
-        # "c_flag": True  # capsule flag
-        "h_flag": True,  # history flag
-        "g_flag": True,  # gnn flag
-        "c_flag": True  # capsule flag
-    }
-
-    cmd = "import data.{}.dictionary as {}".format(para["national"], "data_dic")
-    exec(cmd)
-
-    res = main(para)
-
-    res_file = "./result/{}_{}_{}_{}".format(para["seed"], para["national"], para["batch_size"], para["ed"], para["hl"],
-                                             para["gl"])
-    with open(res_file, "w") as fs:
-        json.dump(res, fs)
-
-
 if __name__ == '__main__':
     top_k = 5
     m = 5
@@ -273,9 +181,7 @@ if __name__ == '__main__':
 
     para = {
         "seed": 5,
-        # "national": "fr",
         "national": args.na,
-        # "national": "kr",
         "batch_size": 1024,
         "epoch": args.epoch,
         "ed": 50,  # embedding dimension
